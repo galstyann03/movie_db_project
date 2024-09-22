@@ -6,7 +6,7 @@ This is a TypeScript Node.js application that provides a RESTful API for managin
 
 Below is the database diagram illustrating the relationships between the tables:
 
-![Database Diagram](db.png)
+![db](https://github.com/user-attachments/assets/2c1063aa-86e5-4361-9d91-445bd3003979)
 
 ## Features
 

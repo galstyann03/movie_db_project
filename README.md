@@ -44,12 +44,12 @@ The following scripts are available in the project:
 
 To set up, populate, and clean up the PostgreSQL database for this project, follow these steps:
 
-# 1. Create Tables
+1. Create Tables
 
 Run the following command to create the necessary tables:
 
-# (```sql)
 -- Navigate to the `database` folder, then run the schema.sql script to create tables
+```bash
 \i database/schema.sql
 
 This will create the Directors, Actors, Genres, Movies, Ratings, and MovieGenres tables with the appropriate relationships.
@@ -59,6 +59,7 @@ This will create the Directors, Actors, Genres, Movies, Ratings, and MovieGenres
 After creating the tables, populate them with sample data by running:
 
 -- Run the data.sql script to insert sample data into the tables
+```bash
 \i database/data.sql
 
 This script will insert 5 records into each of the tables (Directors, Actors, Genres, Movies, and Ratings) and establish the relationships.
@@ -68,6 +69,7 @@ This script will insert 5 records into each of the tables (Directors, Actors, Ge
 If you want to clean up the database by removing all the tables, use the delete.sql file. Run the following command:
 
 -- Run the delete.sql script to drop all tables
+```bash
 \i database/delete.sql
 
 This will remove all tables from the database, including handling any foreign key dependencies with the CASCADE option.

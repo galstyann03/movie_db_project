@@ -20,7 +20,7 @@ export async function getAllDirectors(req: Request, res: Response, next: NextFun
 export async function getDirectorById(req: Request, res: Response, next: NextFunction) {
     try {
         const director: Director | null= await getDirectorByIdService(parseInt(req.params.id));
-        if (!director) res.json(director);
+        if (director) res.json(director);
         else res.status(404).json({error: 'Director not found'});
     } catch (err) {
         next(err);

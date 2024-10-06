@@ -6,11 +6,11 @@ import {
     updateRatingService,
     deleteRatingService
 } from "../services/ratingsService";
-import Rating from "../models/ratingModel";
+import {RatingDTO} from "../dtos/rating.dto";
 
 export async function getAllRatings(req: Request, res: Response, next: NextFunction) {
     try {
-        const ratings: Rating[] = await getAllRatingsService();
+        const ratings = await getAllRatingsService();
         res.json(ratings);
     } catch (err) {
         next(err);
@@ -19,7 +19,7 @@ export async function getAllRatings(req: Request, res: Response, next: NextFunct
 
 export async function getRatingByMovieId(req: Request, res: Response, next: NextFunction) {
     try {
-        const rating: Rating | null= await getRatingByMovieIdService(parseInt(req.params.id));
+        const rating = await getRatingByMovieIdService(parseInt(req.params.id));
         if (rating) res.json(rating);
         else res.status(404).json({error: 'Rating not found'});
     } catch (err) {
@@ -29,8 +29,8 @@ export async function getRatingByMovieId(req: Request, res: Response, next: Next
 
 export async function createRating(req: Request, res: Response, next: NextFunction) {
     try {
-        const {movieId, rating} = req.body;
-        const result = await createRatingService(movieId, rating);
+        const ratingDTO: RatingDTO = req.body;
+        const result = await createRatingService(ratingDTO);
         res.status(201).json(result);
     } catch (err) {
         next(err);
@@ -39,7 +39,8 @@ export async function createRating(req: Request, res: Response, next: NextFuncti
 
 export async function updateRating(req: Request, res: Response, next: NextFunction) {
     try {
-        const result = await updateRatingService(parseInt(req.params.id), req.body.rating);
+        const ratingDTO: RatingDTO = req.body;
+        const result = await updateRatingService(parseInt(req.params.id), ratingDTO.rating);
         if (result) res.json(result);
         else res.status(404).json({error: 'Rating not found'});
     } catch (err) {

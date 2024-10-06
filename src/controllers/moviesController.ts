@@ -6,11 +6,11 @@ import {
     updateMovieService,
     deleteMovieService,
 } from "../services/moviesService";
-import Movie from "../models/movieModel";
+import {MovieDTO} from "../dtos/movie.dto";
 
 export async function getAllMovies(req: Request, res: Response, next: NextFunction) {
     try {
-        const movies: Movie[] = await getAllMoviesService();
+        const movies = await getAllMoviesService();
         res.json(movies);
     } catch (err) {
         next(err);
@@ -19,7 +19,7 @@ export async function getAllMovies(req: Request, res: Response, next: NextFuncti
 
 export async function getMovieById(req: Request, res: Response, next: NextFunction) {
     try {
-        const movie: Movie | null= await getMovieByIdService(parseInt(req.params.id));
+        const movie= await getMovieByIdService(parseInt(req.params.id));
         if (movie) res.json(movie);
         else res.status(404).json({error: 'Movie not found'});
     } catch (err) {
@@ -29,8 +29,8 @@ export async function getMovieById(req: Request, res: Response, next: NextFuncti
 
 export async function createMovie(req: Request, res: Response, next: NextFunction) {
     try {
-        const {title, releaseYear, directorId} = req.body;
-        const result = await createMovieService(title, releaseYear, directorId);
+        const movieDto: MovieDTO = req.body;
+        const result = await createMovieService(movieDto);
         res.status(201).json(result);
     } catch (err) {
         next(err);
@@ -39,8 +39,8 @@ export async function createMovie(req: Request, res: Response, next: NextFunctio
 
 export async function updateMovie(req: Request, res: Response, next: NextFunction) {
     try {
-        const {title, releaseYear, directorId} = req.body;
-        const result = await updateMovieService(parseInt(req.params.id), title, releaseYear, directorId);
+        const movieDto: MovieDTO = req.body;
+        const result = await updateMovieService(parseInt(req.params.id), movieDto);
         if (result) res.json(result);
         else res.status(404).json({error: 'Movie not found'});
     } catch (err) {

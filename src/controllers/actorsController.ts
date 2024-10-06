@@ -6,11 +6,12 @@ import {
     updateActorService,
     deleteActorService
 } from "../services/actorsService";
-import Actor from "../models/actorModel";
+import {CreateActorDto, UpdateActorDto} from "../dtos/actor.dto";
+import {validate} from "class-validator";
 
 export async function getAllActors(req: Request, res: Response, next: NextFunction) {
     try {
-        const actors: Actor[] = await getAllActorsService();
+        const actors = await getAllActorsService();
         res.json(actors);
     } catch (err) {
         next(err);
@@ -19,7 +20,7 @@ export async function getAllActors(req: Request, res: Response, next: NextFuncti
 
 export async function getActorById(req: Request, res: Response, next: NextFunction) {
     try {
-        const actor: Actor | null= await getActorByIdService(parseInt(req.params.id));
+        const actor = await getActorByIdService(parseInt(req.params.id));
         if (actor) res.json(actor);
         else res.status(404).json({error: 'Actor not found'});
     } catch (err) {
@@ -29,8 +30,8 @@ export async function getActorById(req: Request, res: Response, next: NextFuncti
 
 export async function createActor(req: Request, res: Response, next: NextFunction) {
     try {
-        const {name, nationality, dob} = req.body;
-        const result = await createActorService(name, nationality, dob);
+        const actorDto = Object.assign(new CreateActorDto(), req.body);
+        const result = await createActorService(actorDto);
         res.status(201).json(result);
     } catch (err) {
         next(err);
@@ -39,8 +40,8 @@ export async function createActor(req: Request, res: Response, next: NextFunctio
 
 export async function updateActor(req: Request, res: Response, next: NextFunction) {
     try {
-        const {name, nationality, dob} = req.body;
-        const result = await updateActorService(parseInt(req.params.id), name, nationality, dob);
+        const actorDto = Object.assign(new UpdateActorDto(), req.body);
+        const result = await updateActorService(parseInt(req.params.id), actorDto);
         if (result) res.json(result);
         else res.status(404).json({error: 'Actor not found'});
     } catch (err) {
@@ -52,7 +53,7 @@ export async function deleteActor(req: Request, res: Response, next: NextFunctio
     try {
         const result = await deleteActorService(parseInt(req.params.id));
         if (result) res.json(result);
-        else res.status(404).json({error: 'Director not found'});
+        else res.status(404).json({error: 'Actor not found'});
     } catch (err) {
         next(err);
     }

@@ -1,33 +1,41 @@
-import pool from '../config/dbConfig';
-import Director from "../models/directorModel";
+import AppDataSource from "../configs/data-source";
+import {Director} from "../entities/Director";
+import {CreateDirectorDto, UpdateDirectorDto} from "../dtos/director.dto";
 
 export const getAllDirectorsService = async (): Promise<Director[]> => {
-    const result = await pool.query("SELECT * FROM directors");
-    return result.rows;
+    const directorRepository = AppDataSource.getRepository(Director);
+    return await directorRepository.find();
 }
 
-export const getDirectorByIdService = async (directorId: number): Promise<Director | null> => {
-    const result = await pool.query("SELECT * FROM directors WHERE directorId = $1", [directorId]);
-    return result.rows[0] || null;
+export const getDirectorByIdService = async (directorid: number): Promise<Director | null> => {
+    const directorRepository = AppDataSource.getRepository(Director);
+    return await directorRepository.findOneBy({directorid});
 }
 
-export const createDirectorService = async (name: string, nationality: string, dob: Date): Promise<Director> => {
-    const result = await pool.query(
-        "INSERT INTO directors(name, nationality, dob) VALUES($1,$2,$3) RETURNING *",
-        [name, nationality, dob]
-    );
-    return result.rows[0];
+export const createDirectorService = async (createDirectorDto: CreateDirectorDto): Promise<Director> => {
+    const directorRepository = AppDataSource.getRepository(Director);
+    const director = directorRepository.create(createDirectorDto);
+    return await directorRepository.save(director);
 }
 
-export const updateDirectorService = async (directorId: number, name: string, nationality: string, dob: Date): Promise<Director | null> => {
-    const result = await pool.query(
-      "UPDATE directors SET name = $1, nationality = $2, dob = $3 WHERE directorId = $4 RETURNING *",
-      [name, nationality, dob, directorId]
-    );
-    return result.rows[0] || null;
+export const updateDirectorService = async (directorid: number, updateDirectorDto: UpdateDirectorDto): Promise<Director | null> => {
+    const directorRepository = AppDataSource.getRepository(Director);
+    const director = await directorRepository.findOneBy({directorid});
+
+    if (!director) return null;
+
+    if (updateDirectorDto.name !== undefined) director.name = updateDirectorDto.name;
+    if (updateDirectorDto.nationality !== undefined) director.nationality = updateDirectorDto.nationality;
+    if (updateDirectorDto.dob !== undefined) director.dob = updateDirectorDto.dob;
+
+    return await directorRepository.save(director);
 }
 
-export const deleteDirectorService = async (directorId: number): Promise<Director | null> => {
-    const result = await pool.query("DELETE FROM directors WHERE directorId = $1 RETURNING *", [directorId]);
-    return result.rows[0] || null;
+export const deleteDirectorService = async (directorid: number): Promise<Director | null> => {
+    const directorRepository = AppDataSource.getRepository(Director);
+    const director = await directorRepository.findOneBy({directorid});
+
+    if (!director) return null;
+
+    return await directorRepository.remove(director);
 }

@@ -6,11 +6,11 @@ import {
     updateDirectorService,
     deleteDirectorService
 } from "../services/directorsService";
-import Director from "../models/directorModel";
+import {CreateDirectorDto, UpdateDirectorDto} from "../dtos/director.dto";
 
 export async function getAllDirectors(req: Request, res: Response, next: NextFunction) {
     try {
-        const directors: Director[] = await getAllDirectorsService();
+        const directors = await getAllDirectorsService();
         res.json(directors);
     } catch (err) {
         next(err);
@@ -19,7 +19,7 @@ export async function getAllDirectors(req: Request, res: Response, next: NextFun
 
 export async function getDirectorById(req: Request, res: Response, next: NextFunction) {
     try {
-        const director: Director | null= await getDirectorByIdService(parseInt(req.params.id));
+        const director= await getDirectorByIdService(parseInt(req.params.id));
         if (director) res.json(director);
         else res.status(404).json({error: 'Director not found'});
     } catch (err) {
@@ -29,8 +29,8 @@ export async function getDirectorById(req: Request, res: Response, next: NextFun
 
 export async function createDirector(req: Request, res: Response, next: NextFunction) {
     try {
-        const {name, nationality, dob} = req.body;
-        const result = await createDirectorService(name, nationality, dob);
+        const createDirectorDto: CreateDirectorDto = req.body;
+        const result = await createDirectorService(createDirectorDto);
         res.status(201).json(result);
     } catch (err) {
         next(err);
@@ -39,8 +39,8 @@ export async function createDirector(req: Request, res: Response, next: NextFunc
 
 export async function updateDirector(req: Request, res: Response, next: NextFunction) {
     try {
-        const {name, nationality, dob} = req.body;
-        const result = await updateDirectorService(parseInt(req.params.id), name, nationality, dob);
+        const updateDirectorDto: UpdateDirectorDto = req.body;
+        const result = await updateDirectorService(parseInt(req.params.id), updateDirectorDto);
         if (result) res.json(result);
         else res.status(404).json({error: 'Director not found'});
     } catch (err) {

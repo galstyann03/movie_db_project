@@ -1,23 +1,37 @@
-import pool from '../config/dbConfig';
-import MovieGenre from "../models/movieGenreModel";
+import AppDataSource from "../configs/data-source";
+import {Movie} from "../entities/Movie";
+import {Genre} from "../entities/Genre";
+import {In} from "typeorm";
+import {MovieGenresDTO} from "../dtos/movieGenres.dto";
 
-export const getAllMovieGenresService = async (): Promise<MovieGenre[]> => {
-        const result = await pool.query("SELECT * FROM movieGenres");
-        return result.rows;
+export const getAllMovieGenresService = async (): Promise<Movie[]> => {
+    const movieRepository = AppDataSource.getRepository(Movie);
+    return await movieRepository.find({relations: ["genres"]});
 }
 
-export const createMovieGenreService = async (movieId: number, genreId: number): Promise<MovieGenre> => {
-        const result = await pool.query(
-            "INSERT INTO movieGenres(movieId, genreId) VALUES($1, $2) RETURNING *",
-            [movieId, genreId]
-        );
-        return result.rows[0];
+export const createMovieWithGenresService = async (movieGenresDTO: MovieGenresDTO): Promise<Movie> => {
+    const movieRepository = AppDataSource.getRepository(Movie);
+    const genreRepository = AppDataSource.getRepository(Genre);
+
+    const { title, releaseyear, genreIDs } = movieGenresDTO;
+
+    const genres = await genreRepository.findBy({genreid: In(genreIDs)});
+    const movie = movieRepository.create({title, releaseyear, genres});
+
+    return await movieRepository.save(movie);
 }
 
-export const deleteMovieGenreService = async (movieId: number, genreId: number): Promise<MovieGenre | null> => {
-        const result = await pool.query(
-            "DELETE FROM movieGenres WHERE movieId = $1 AND genreId = $2 RETURNING *",
-            [movieId, genreId]
-        );
-        return result.rows[0] || null;
+export const updateMovieGenresService = async (movieid: number, genreIds: number[]): Promise<Movie | null> => {
+    const movieRepository = AppDataSource.getRepository(Movie);
+    const genreRepository = AppDataSource.getRepository(Genre);
+
+    console.log("movieId", movieid);
+
+    const movie = await movieRepository.findOneBy({movieid});
+    if (!movie) return null;
+
+    console.log(movie)
+
+    movie.genres = await genreRepository.findBy({genreid: In(genreIds)});
+    return await movieRepository.save(movie);
 }

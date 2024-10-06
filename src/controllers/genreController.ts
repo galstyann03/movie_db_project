@@ -6,11 +6,11 @@ import {
     updateGenreService,
     deleteGenreService
 } from "../services/genresService";
-import Genre from "../models/genreModel";
+import {GenreDTO} from "../dtos/genre.dto";
 
 export async function getAllGenres(req: Request, res: Response, next: NextFunction) {
     try {
-        const genres: Genre[] = await getAllGenresService();
+        const genres = await getAllGenresService();
         res.json(genres);
     } catch (err) {
         next(err);
@@ -19,7 +19,7 @@ export async function getAllGenres(req: Request, res: Response, next: NextFuncti
 
 export async function getGenreById(req: Request, res: Response, next: NextFunction) {
     try {
-        const genre: Genre | null= await getGenreByIdService(parseInt(req.params.id));
+        const genre= await getGenreByIdService(parseInt(req.params.id));
         if (genre) res.json(genre);
         else res.status(404).json({error: 'Genre not found'});
     } catch (err) {
@@ -29,8 +29,8 @@ export async function getGenreById(req: Request, res: Response, next: NextFuncti
 
 export async function createGenre(req: Request, res: Response, next: NextFunction) {
     try {
-        const {genreName} = req.body;
-        const result = await createGenreService(genreName);
+        const genreDto: GenreDTO = req.body;
+        const result = await createGenreService(genreDto);
         res.status(201).json(result);
     } catch (err) {
         next(err);
@@ -39,8 +39,8 @@ export async function createGenre(req: Request, res: Response, next: NextFunctio
 
 export async function updateGenre(req: Request, res: Response, next: NextFunction) {
     try {
-        const {genreName} = req.body;
-        const result = await updateGenreService(parseInt(req.params.id), genreName);
+        const genreDto: GenreDTO = req.body;
+        const result = await updateGenreService(parseInt(req.params.id), genreDto);
         if (result) res.json(result);
         else res.status(404).json({error: 'Genre not found'});
     } catch (err) {

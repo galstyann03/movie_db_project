@@ -1,10 +1,10 @@
 import {Router} from 'express';
-import {createMovieGenre, deleteMovieGenre, getAllMovieGenres} from '../controllers/movieGenresController';
+import {updateMovieGenre, createMovieWithGenres, getAllMovieGenres} from '../controllers/movieGenresController';
 
 const movieGenresRouter = Router();
 
 movieGenresRouter.get('/', getAllMovieGenres);
-movieGenresRouter.post('/', createMovieGenre);
-movieGenresRouter.delete('/:movieId/:genreId', deleteMovieGenre);
+movieGenresRouter.post('/', createMovieWithGenres);
+movieGenresRouter.put('/:movieId', updateMovieGenre);
 
 export default movieGenresRouter;

@@ -1,6 +1,15 @@
-# Movie Database API
+# Movie Database Project
 
-This is a TypeScript Node.js application that provides a RESTful API for managing a movie database. The database consists of tables for directors, actors, genres, movies, and ratings.
+## Description
+A movie database application built with Node.js, TypeScript, PostgreSQL, and TypeORM. This application allows users to manage movie information, including directors, actors, genres, and ratings.
+
+## Technologies Used
+- **Node.js**: Server-side JavaScript runtime
+- **TypeScript**: JavaScript with static types
+- **PostgreSQL**: Relational database management system
+- **TypeORM**: ORM for TypeScript and JavaScript
+- **Express**: Web framework for Node.js
+- **Winston**: Logger for Node.js
 
 ## Database Diagram
 
@@ -13,89 +22,47 @@ One-to-One: Each record in Movies corresponds to exactly one record in Ratings.
 One-to-Many: A record in Directors can have multiple corresponding records in Movies, but a record in Movies can correspond to only one record in Directors.
 Many-to-Many: Records in Movies can be associated with multiple records in Genres, and vice versa. This requires a bridge table MovieGenres.
 
-## Features
-
-- CRUD operations for directors, actors, genres, movies, and ratings.
-- Many-to-many relationship management between movies and genres.
-
-## Scripts
-
-The following scripts are available in the project:
-
-- **install**: Install dependencies.
-  ```bash
-  npm install
-
-- **start**: Runs the application.
-  ```bash
-  npm start
-
-- **dev**: Runs the application in watch mode.
-  ```bash
-  npm run dev
-
-# Run using Docker (optional)
-- **run**: Runs the application in watch mode.
-  ```bash
-  docker-compose up
-
-
-## Database Setup
-
-To set up, populate, and clean up the PostgreSQL database for this project, follow these steps:
-
-1. Create Tables
-
-Run the following command to create the necessary tables:
-
--- Navigate to the `database` folder, then run the schema.sql script to create tables
-\i database/schema.sql
-
-This will create the Directors, Actors, Genres, Movies, Ratings, and MovieGenres tables with the appropriate relationships.
-
-# 2. Populate Tables with Data
-
-After creating the tables, populate them with sample data by running:
-
--- Run the data.sql script to insert sample data into the tables
-\i database/data.sql
-
-This script will insert 5 records into each of the tables (Directors, Actors, Genres, Movies, and Ratings) and establish the relationships.
-
-# 3. Delete Tables (Cleanup)
-
-If you want to clean up the database by removing all the tables, use the delete.sql file. Run the following command:
-
--- Run the delete.sql script to drop all tables
-\i database/delete.sql
-
-This will remove all tables from the database, including handling any foreign key dependencies with the CASCADE option.
-
-
-## Database Setup Using CLI
-
-To set up, populate, and clean up the PostgreSQL database using the command line, follow the instructions below:
-
-### 1. Create Tables
-
-To create the necessary tables, follow these steps:
-
-1. Open your terminal and navigate to the project directory where the `database` folder is located:
+## Installation
+1. Clone the repository:
    ```bash
-   cd /movie-db-project
+   git clone <https://github.com/galstyann03/movie_db_homework>
+   cd movie-db-project
 
-2. Connect to your PostgreSQL database:
-   ```bash
-   psql -U postgres -d movies_db
-   
-3. Run the schema script to create the tables:
-   ```bash
-    \i database/schema.sql
+2. Install dependencies:
 
-4. Populate Tables with Data
-   ```bash
-    \i database/data.sql
-   
-5. Delete Tables (Cleanup)
-   ```bash
-    \i database/delete.sql
+npm install
+
+3. Set up your environment variables in a .env file:
+
+DB_HOST=your_db_host
+DB_PORT=your_db_port
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_NAME=your_db_name
+
+4. Compile TypeScript to JavaScript:
+
+Compile TypeScript to JavaScript:
+
+npm run build
+
+5. Run database migrations:
+
+npm run migration:run
+
+6. Start the server:
+
+npm start
+
+7. To revert the migrations:
+
+npm run migration:revert
+
+
+## Usage
+Access the API via http://localhost:3000.
+Use Postman or any API client to interact with the endpoints.
+API Endpoints
+
+License
+This project is licensed under the MIT License. See the LICENSE file for details.

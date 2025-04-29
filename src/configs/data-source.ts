@@ -16,7 +16,7 @@ const AppDataSource = new DataSource({
     database: process.env.DB_NAME,
     entities: [Actor, Director, Genre, Movie, Rating],
     migrations: [__dirname + "/migrations/*.ts"],
-    synchronize: false
+    synchronize: true
 });
 
 export default AppDataSource;

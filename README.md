@@ -25,7 +25,9 @@ Many-to-Many: Records in Movies can be associated with multiple records in Genre
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone <https://github.com/galstyann03/movie_db_homework>
+   git clone https://github.com/galstyann03/movie_db_project.git
+   or
+   git clone git@github.com:galstyann03/movie_db_project.git
    cd movie-db-project
 
 2. Install dependencies:

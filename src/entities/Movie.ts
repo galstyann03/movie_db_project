@@ -19,6 +19,10 @@ export class Movie {
     @IsOptional()
     releaseyear!: number;
 
+    @Column({ nullable: true })
+    @IsOptional()
+    duration!: number;
+
     @ManyToOne(() => Director, (director) => director.movies, {cascade: true})
     @JoinColumn({name: 'directorid'})
     director!: Director;

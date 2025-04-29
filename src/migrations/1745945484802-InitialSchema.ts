@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class InitialSchema1728231265437 implements MigrationInterface {
-    name = 'InitialSchema1728231265437'
+export class InitialSchema1745945484802 implements MigrationInterface {
+    name = 'InitialSchema1745945484802'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
@@ -100,7 +100,7 @@ export class InitialSchema1728231265437 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-       await queryRunner.query(`
+        await queryRunner.query(`
            DROP TABLE IF EXISTS MovieGenres CASCADE;
            DROP TABLE IF EXISTS Ratings CASCADE;
            DROP TABLE IF EXISTS Movies CASCADE;

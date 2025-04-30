@@ -11,6 +11,8 @@ import {CreateDirectorDto, UpdateDirectorDto} from "../dtos/director.dto";
 export async function getAllDirectors(req: Request, res: Response, next: NextFunction) {
     try {
         const directors = await getAllDirectorsService();
+        if (!directors || directors.length === 0)
+            return res.status(404).json({error: 'No directors found'});
         res.json(directors);
     } catch (err) {
         next(err);
@@ -29,9 +31,9 @@ export async function getDirectorById(req: Request, res: Response, next: NextFun
 
 export async function createDirector(req: Request, res: Response, next: NextFunction) {
     try {
-        const createDirectorDto: CreateDirectorDto = req.body;
-        const result = await createDirectorService(createDirectorDto);
-        res.status(201).json(result);
+        const directorDto = Object.assign(new CreateDirectorDto(), req.body);
+        const director = await createDirectorService(directorDto);
+        res.status(201).json(director);
     } catch (err) {
         next(err);
     }
@@ -39,9 +41,9 @@ export async function createDirector(req: Request, res: Response, next: NextFunc
 
 export async function updateDirector(req: Request, res: Response, next: NextFunction) {
     try {
-        const updateDirectorDto: UpdateDirectorDto = req.body;
-        const result = await updateDirectorService(parseInt(req.params.id), updateDirectorDto);
-        if (result) res.json(result);
+        const directorDto = Object.assign(new UpdateDirectorDto(), req.body);
+        const director = await updateDirectorService(parseInt(req.params.id), directorDto);
+        if (director) res.json(director);
         else res.status(404).json({error: 'Director not found'});
     } catch (err) {
         next(err);
@@ -50,8 +52,8 @@ export async function updateDirector(req: Request, res: Response, next: NextFunc
 
 export async function deleteDirector(req: Request, res: Response, next: NextFunction) {
     try {
-        const result = await deleteDirectorService(parseInt(req.params.id));
-        if (result) res.json(result);
+        const director = await deleteDirectorService(parseInt(req.params.id));
+        if (director) res.json(director);
         else res.status(404).json({error: 'Director not found'});
     } catch (err) {
         next(err);

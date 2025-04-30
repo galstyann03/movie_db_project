@@ -33,7 +33,6 @@ export const updateRatingService = async (movieid: number, ratingValue: number):
     if (!rating) return null;
 
     rating.rating = ratingValue;
-
     return await ratingRepository.save(rating);
 }
 
@@ -45,6 +44,5 @@ export const deleteRatingService = async (movieid: number): Promise<Rating | nul
     });
 
     if (!rating) return null;
-
     return await ratingRepository.remove(rating);
 }

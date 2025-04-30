@@ -25,12 +25,8 @@ export const updateMovieGenresService = async (movieid: number, genreIds: number
     const movieRepository = AppDataSource.getRepository(Movie);
     const genreRepository = AppDataSource.getRepository(Genre);
 
-    console.log("movieId", movieid);
-
     const movie = await movieRepository.findOneBy({movieid});
     if (!movie) return null;
-
-    console.log(movie)
 
     movie.genres = await genreRepository.findBy({genreid: In(genreIds)});
     return await movieRepository.save(movie);

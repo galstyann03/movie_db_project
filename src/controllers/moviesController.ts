@@ -11,6 +11,8 @@ import {MovieDTO} from "../dtos/movie.dto";
 export async function getAllMovies(req: Request, res: Response, next: NextFunction) {
     try {
         const movies = await getAllMoviesService();
+        if (movies.length === 0)
+            return res.status(404).json({error: 'No movies found'});
         res.json(movies);
     } catch (err) {
         next(err);
@@ -29,9 +31,9 @@ export async function getMovieById(req: Request, res: Response, next: NextFuncti
 
 export async function createMovie(req: Request, res: Response, next: NextFunction) {
     try {
-        const movieDto: MovieDTO = req.body;
-        const result = await createMovieService(movieDto);
-        res.status(201).json(result);
+        const movieDto = Object.assign(new MovieDTO(), req.body);
+        const movie = await createMovieService(movieDto);
+        res.status(201).json(movie);
     } catch (err) {
         next(err);
     }
@@ -39,9 +41,9 @@ export async function createMovie(req: Request, res: Response, next: NextFunctio
 
 export async function updateMovie(req: Request, res: Response, next: NextFunction) {
     try {
-        const movieDto: MovieDTO = req.body;
-        const result = await updateMovieService(parseInt(req.params.id), movieDto);
-        if (result) res.json(result);
+        const movieDto = Object.assign(new MovieDTO(), req.body);
+        const movie = await updateMovieService(parseInt(req.params.id), movieDto);
+        if (movie) res.json(movie);
         else res.status(404).json({error: 'Movie not found'});
     } catch (err) {
         next(err);
@@ -50,8 +52,8 @@ export async function updateMovie(req: Request, res: Response, next: NextFunctio
 
 export async function deleteMovie(req: Request, res: Response, next: NextFunction) {
     try {
-        const result = await deleteMovieService(parseInt(req.params.id));
-        if (result) res.json(result);
+        const movie = await deleteMovieService(parseInt(req.params.id));
+        if (movie) res.json(movie);
         else res.status(404).json({error: 'Movie not found'});
     } catch (err) {
         next(err);

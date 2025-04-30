@@ -18,9 +18,8 @@ export const createMovieService = async (movieDTO: MovieDTO): Promise<Movie> => 
     const directorRepository = AppDataSource.getRepository(Director);
 
     const director = await directorRepository.findOneBy({ directorid: movieDTO.directorid });
-    if (!director) {
+    if (!director)
         throw new Error("Director not found");
-    }
 
     const movie = movieRepository.create({ title: movieDTO.title, releaseyear: movieDTO.releaseyear, director });
     return await movieRepository.save(movie);
@@ -34,9 +33,8 @@ export const updateMovieService = async (movieid: number, movieDTO: MovieDTO): P
     if (!movie) return null;
 
     const director = await directorRepository.findOneBy({directorid: movieDTO.directorid});
-    if (!director) {
+    if (!director)
         throw new Error("Director not found");
-    }
 
     if (movieDTO.title !== undefined) movie.title = movieDTO.title;
     if (movieDTO.releaseyear !== undefined) movie.releaseyear = movieDTO.releaseyear;
@@ -50,6 +48,5 @@ export const deleteMovieService = async (movieid: number): Promise<Movie | null>
     const movie = await movieRepository.findOneBy({movieid});
 
     if (!movie) return null;
-
     return await movieRepository.remove(movie);
 }

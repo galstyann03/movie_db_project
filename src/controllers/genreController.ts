@@ -11,6 +11,8 @@ import {GenreDTO} from "../dtos/genre.dto";
 export async function getAllGenres(req: Request, res: Response, next: NextFunction) {
     try {
         const genres = await getAllGenresService();
+        if (!genres || genres.length === 0)
+            return res.status(404).json({error: 'No genres found'});
         res.json(genres);
     } catch (err) {
         next(err);
@@ -29,9 +31,9 @@ export async function getGenreById(req: Request, res: Response, next: NextFuncti
 
 export async function createGenre(req: Request, res: Response, next: NextFunction) {
     try {
-        const genreDto: GenreDTO = req.body;
-        const result = await createGenreService(genreDto);
-        res.status(201).json(result);
+        const genreDto = Object.assign(new GenreDTO(), req.body);
+        const genre = await createGenreService(genreDto);
+        res.status(201).json(genre);
     } catch (err) {
         next(err);
     }
@@ -40,8 +42,8 @@ export async function createGenre(req: Request, res: Response, next: NextFunctio
 export async function updateGenre(req: Request, res: Response, next: NextFunction) {
     try {
         const genreDto: GenreDTO = req.body;
-        const result = await updateGenreService(parseInt(req.params.id), genreDto);
-        if (result) res.json(result);
+        const genre = await updateGenreService(parseInt(req.params.id), genreDto);
+        if (genre) res.json(genre);
         else res.status(404).json({error: 'Genre not found'});
     } catch (err) {
         next(err);
@@ -50,8 +52,8 @@ export async function updateGenre(req: Request, res: Response, next: NextFunctio
 
 export async function deleteGenre(req: Request, res: Response, next: NextFunction) {
     try {
-        const result = await deleteGenreService(parseInt(req.params.id));
-        if (result) res.json(result);
+        const genre = await deleteGenreService(parseInt(req.params.id));
+        if (genre) res.json(genre);
         else res.status(404).json({error: 'Genre not found'});
     } catch (err) {
         next(err);

@@ -23,12 +23,9 @@ export const updateActorService = async (actorid: number, updateActorDto: Update
     const actor = await actorRepository.findOneBy({actorid});
 
     if (!actor) return null;
-
     if (updateActorDto.name !== undefined) actor.name = updateActorDto.name;
     if (updateActorDto.nationality !== undefined) actor.nationality = updateActorDto.nationality;
     if (updateActorDto.dob !== undefined) actor.dob = updateActorDto.dob;
-
-
     return await actorRepository.save(actor);
 }
 
@@ -37,6 +34,5 @@ export const deleteActorService = async (actorid: number): Promise<Actor | null>
     const actor = await actorRepository.findOneBy({actorid});
 
     if (!actor) return null;
-
     return actorRepository.remove(actor);
 }

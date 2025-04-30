@@ -33,6 +33,8 @@ export async function createActor(req: Request, res: Response, next: NextFunctio
     try {
         const actorDto = Object.assign(new CreateActorDto(), req.body);
         const actor = await createActorService(actorDto);
+        if (!actor)
+            return res.status(400).json({error: 'Invalid actor data'});
         res.status(201).json(actor);
     } catch (err) {
         next(err);

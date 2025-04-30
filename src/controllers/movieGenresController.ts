@@ -21,6 +21,8 @@ export async function createMovieWithGenres(req: Request, res: Response, next: N
     try {
         const movieGenresDTO = Object.assign(new MovieGenresDTO(), req.body);
         const movieGenre = await createMovieWithGenresService(movieGenresDTO);
+        if (!movieGenre)
+            return res.status(400).json({error: 'Invalid movie data'});
         res.status(201).json(movieGenre);
     } catch (err) {
         next(err);

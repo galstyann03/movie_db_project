@@ -33,6 +33,8 @@ export async function createGenre(req: Request, res: Response, next: NextFunctio
     try {
         const genreDto = Object.assign(new GenreDTO(), req.body);
         const genre = await createGenreService(genreDto);
+        if (!genre)
+            return res.status(400).json({error: 'Invalid genre data'});
         res.status(201).json(genre);
     } catch (err) {
         next(err);

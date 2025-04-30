@@ -33,6 +33,8 @@ export async function createRating(req: Request, res: Response, next: NextFuncti
     try {
         const ratingDTO = Object.assign(new RatingDTO(), req.body);
         const rating = await createRatingService(ratingDTO);
+        if (!rating)
+            return res.status(400).json({error: 'Invalid rating data'});
         res.status(201).json(rating);
     } catch (err) {
         next(err);

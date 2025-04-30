@@ -33,6 +33,8 @@ export async function createDirector(req: Request, res: Response, next: NextFunc
     try {
         const directorDto = Object.assign(new CreateDirectorDto(), req.body);
         const director = await createDirectorService(directorDto);
+        if (!director)
+            return res.status(400).json({error: 'Invalid director data'});
         res.status(201).json(director);
     } catch (err) {
         next(err);

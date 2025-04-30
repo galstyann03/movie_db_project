@@ -33,6 +33,8 @@ export async function createMovie(req: Request, res: Response, next: NextFunctio
     try {
         const movieDto = Object.assign(new MovieDTO(), req.body);
         const movie = await createMovieService(movieDto);
+        if (!movie)
+            return res.status(400).json({error: 'Invalid movie data'});
         res.status(201).json(movie);
     } catch (err) {
         next(err);
